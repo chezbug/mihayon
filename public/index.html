@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Mihayon</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <a class="brand" href="/">mi<span>hayon</span></a>
+      <nav>
+        <a href="/edit">New document</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>Suspiciously encrypted web</h1>
+        <p>
+          Write markdown, share a link. The content is encrypted in your browser
+          before it ever leaves. The server stores ciphertext and nothing else —
+          it cannot read your document, and it cannot tell who wrote it.
+        </p>
+        <div class="cta"><a href="/edit">Create a document</a></div>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <h3>Keys never leave the client</h3>
+          <p>The decryption key lives in the URL fragment (after <code>#</code>),
+            which browsers never send to the server.</p>
+        </div>
+        <div class="feature">
+          <h3>Zero-knowledge host</h3>
+          <p>Records hold only ciphertext, a hash, and timestamps. No accounts,
+            no authors, no plaintext, no metadata to link a document to a person.</p>
+        </div>
+        <div class="feature">
+          <h3>Edit anytime</h3>
+          <p>An edit link carries a write secret. Anyone holding it can update
+            the document; the server verifies a hash without ever storing the secret.</p>
+        </div>
+        <div class="feature">
+          <h3>Rendered safely</h3>
+          <p>Decrypted markdown is sanitized and rendered under a strict content
+            security policy — no external scripts, styles, or beacons.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

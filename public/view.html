@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Mihayon</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <a class="brand" href="/">mi<span>hayon</span></a>
+      <nav>
+        <a href="/edit">New document</a>
+      </nav>
+    </header>
+    <main>
+      <div id="status" class="status">Loading…</div>
+      <article id="content" class="content" hidden></article>
+      <div id="meta" class="meta"></div>
+    </main>
+
+    <!-- Vendored, self-hosted. No external network requests. -->
+    <script src="/vendor/marked.min.js"></script>
+    <script src="/vendor/purify.min.js"></script>
+    <script type="module" src="/js/view.js"></script>
+  </body>
+</html>
