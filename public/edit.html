@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Edit · Mihayon</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <a class="brand" href="/">mi<span>hayon</span></a>
+      <nav>
+        <a href="/edit">New document</a>
+      </nav>
+    </header>
+    <main>
+      <div class="toolbar">
+        <button id="save">Save</button>
+        <button id="delete" class="secondary" hidden>Delete</button>
+        <span id="mode" class="mode"></span>
+      </div>
+
+      <div id="status" class="status" hidden></div>
+
+      <div class="split">
+        <textarea
+          id="editor"
+          spellcheck="false"
+          placeholder="# Write markdown here&#10;&#10;It is encrypted in your browser before it is saved."></textarea>
+        <article id="preview" class="preview content"></article>
+      </div>
+
+      <div id="links" class="links" hidden>
+        <h3>Your links</h3>
+        <label for="view-link">View link (read-only — safe to share)</label>
+        <div class="row">
+          <input id="view-link" readonly />
+          <button class="secondary" data-copy="view-link">Copy</button>
+        </div>
+        <label for="edit-link">Edit link (keep private — grants write access)</label>
+        <div class="row">
+          <input id="edit-link" readonly />
+          <button class="secondary" data-copy="edit-link">Copy</button>
+        </div>
+        <p class="warn">
+          These links contain the only copy of the decryption key and write
+          secret. They are not stored anywhere else — if you lose them, the
+          document is unrecoverable.
+        </p>
+      </div>
+    </main>
+
+    <!-- Vendored, self-hosted. No external network requests. -->
+    <script src="/vendor/marked.min.js"></script>
+    <script src="/vendor/purify.min.js"></script>
+    <script type="module" src="/js/edit.js"></script>
+  </body>
+</html>

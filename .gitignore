@@ -1,0 +1,12 @@
+node_modules/
+data/
+*.log
+.env
+.DS_Store
+
+# Vendored browser libs are copied from node_modules at install time.
+public/vendor/
+
+# Local editor / tooling
+.claude/
+.vscode/

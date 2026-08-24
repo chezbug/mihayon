@@ -1,0 +1,25 @@
+{
+  "name": "mihayon",
+  "version": "0.1.0",
+  "description": "Suspiciously encrypted web — zero-knowledge encrypted markdown that decrypts only in the client.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "mihayon": "server/index.js"
+  },
+  "scripts": {
+    "vendor": "node scripts/vendor.js",
+    "prepare": "node scripts/vendor.js",
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dompurify": "^3.1.6",
+    "express": "^4.19.2",
+    "marked": "^12.0.2"
+  }
+}
