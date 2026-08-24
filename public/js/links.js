@@ -15,16 +15,28 @@ export function buildViewLink(id, key) {
   return `${location.origin}/d/${encodeURIComponent(id)}#${key}`;
 }
 
+// Split view link: the fragment carries only part A, tagged with an "s." prefix
+// so the viewer knows to ask for part B (delivered out of band). base64url never
+// contains a dot, so the prefix is unambiguous.
+export function buildSplitViewLink(id, partA) {
+  return `${location.origin}/d/${encodeURIComponent(id)}#s.${partA}`;
+}
+
 export function buildEditLink(id, key, writeSecret) {
   return `${location.origin}/edit/${encodeURIComponent(id)}#${key}.${writeSecret}`;
 }
 
-// From the current view page (/d/<id>#<key>).
+// From the current view page.
+//   Full  link: /d/<id>#<key>          -> { id, mode:'full',  key }
+//   Split link: /d/<id>#s.<partA>      -> { id, mode:'split', partA }
 export function parseViewLocation() {
   const m = location.pathname.match(/^\/d\/([^/]+)\/?$/);
   const id = m ? decodeURIComponent(m[1]) : null;
-  const key = location.hash.replace(/^#/, '') || null;
-  return { id, key };
+  const frag = location.hash.replace(/^#/, '');
+  if (frag.startsWith('s.')) {
+    return { id, mode: 'split', partA: frag.slice(2) || null, key: null };
+  }
+  return { id, mode: 'full', key: frag || null, partA: null };
 }
 
 // From the current edit page (/edit or /edit/<id>#<key>.<writeSecret>).

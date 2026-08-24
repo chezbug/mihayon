@@ -210,6 +210,36 @@ textarea#editor {
   margin-top: 0.6rem;
 }
 
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.muted-note {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 0.6rem;
+}
+
+.qr {
+  margin-top: 0.8rem;
+  display: inline-block;
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  line-height: 0;
+}
+
+.qr svg {
+  width: 180px;
+  height: 180px;
+  display: block;
+}
+
 /* Rendered markdown */
 .content h1, .content h2, .content h3 { line-height: 1.25; }
 .content pre {

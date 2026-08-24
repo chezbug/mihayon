@@ -9,10 +9,16 @@ import {
   encrypt,
   decrypt,
   generateWriteSecret,
+  splitExistingKey,
 } from './crypto.js';
 import { createDoc, fetchDoc, updateDoc, deleteDoc } from './api.js';
 import { renderMarkdown } from './markdown.js';
-import { parseEditLocation, buildViewLink, buildEditLink } from './links.js';
+import {
+  parseEditLocation,
+  buildViewLink,
+  buildEditLink,
+  buildSplitViewLink,
+} from './links.js';
 
 const els = {
   editor: document.getElementById('editor'),
@@ -24,6 +30,12 @@ const els = {
   viewLink: document.getElementById('view-link'),
   editLink: document.getElementById('edit-link'),
   mode: document.getElementById('mode'),
+  splitToggle: document.getElementById('split-toggle'),
+  fullRow: document.getElementById('full-view-row'),
+  splitBox: document.getElementById('split-box'),
+  splitLink: document.getElementById('split-link'),
+  partB: document.getElementById('split-part-b'),
+  qr: document.getElementById('qr'),
 };
 
 // In-memory session state. Secrets never persist beyond the tab.
@@ -44,9 +56,36 @@ function renderPreview() {
   els.preview.innerHTML = renderMarkdown(els.editor.value);
 }
 
+function renderQr(text) {
+  // Uses the vendored qrcode-generator global. Output is inline SVG (no script),
+  // which is safe under the page CSP.
+  try {
+    const qr = window.qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    els.qr.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+  } catch {
+    els.qr.textContent = '(could not render QR)';
+  }
+}
+
 function showLinks() {
-  els.viewLink.value = buildViewLink(state.id, state.keyStr);
+  // The edit link always carries the full key so the author can edit easily.
   els.editLink.value = buildEditLink(state.id, state.keyStr, state.writeSecret);
+
+  if (els.splitToggle.checked) {
+    // Split the read key into part A (URL) and part B (QR / string).
+    const { partA, partB } = splitExistingKey(state.keyStr);
+    els.splitLink.value = buildSplitViewLink(state.id, partA);
+    els.partB.value = partB;
+    renderQr(partB);
+    els.fullRow.hidden = true;
+    els.splitBox.hidden = false;
+  } else {
+    els.viewLink.value = buildViewLink(state.id, state.keyStr);
+    els.fullRow.hidden = false;
+    els.splitBox.hidden = true;
+  }
   els.links.hidden = false;
 }
 
@@ -125,6 +164,11 @@ function main() {
   els.editor.addEventListener('input', renderPreview);
   els.save.addEventListener('click', save);
   els.del.addEventListener('click', removeDoc);
+  // Re-render the share links when the split toggle changes (only meaningful
+  // once the document has been saved and a key exists).
+  els.splitToggle.addEventListener('change', () => {
+    if (state.id && state.keyStr) showLinks();
+  });
 
   for (const btn of document.querySelectorAll('[data-copy]')) {
     btn.addEventListener('click', () => {

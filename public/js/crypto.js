@@ -57,6 +57,60 @@ export async function importKey(b64url) {
   ]);
 }
 
+// --- split keys (2-of-2) ---------------------------------------------------
+
+// Split a document's read capability into two parts that are both required to
+// decrypt. This is additive secret sharing over GF(2): the real key is
+// partA XOR partB, and each part on its own is uniformly random — it reveals
+// nothing about the key or the content. Part A travels in the URL; part B is
+// delivered out of band (a QR code or a pasted string).
+
+function xorBytes(a, b) {
+  if (a.length !== b.length) throw new Error('length mismatch');
+  const out = new Uint8Array(a.length);
+  for (let i = 0; i < a.length; i++) out[i] = a[i] ^ b[i];
+  return out;
+}
+
+// Returns { key, partA, partB } where partA/partB are base64url strings and
+// key is the importable CryptoKey (partA XOR partB).
+export async function generateSplitKey() {
+  const partA = crypto.getRandomValues(new Uint8Array(32));
+  const partB = crypto.getRandomValues(new Uint8Array(32));
+  const raw = xorBytes(partA, partB);
+  const key = await crypto.subtle.importKey('raw', raw, { name: 'AES-GCM' }, true, [
+    'encrypt',
+    'decrypt',
+  ]);
+  return {
+    key,
+    partA: bytesToBase64Url(partA),
+    partB: bytesToBase64Url(partB),
+  };
+}
+
+// Given an existing full key (base64url), produce a fresh split of it. Any
+// (A, B) with A XOR B == key is valid, so shares can be regenerated at will.
+export function splitExistingKey(keyB64url) {
+  const raw = base64UrlToBytes(keyB64url);
+  if (raw.length !== 32) throw new Error('bad key length');
+  const partA = crypto.getRandomValues(new Uint8Array(32));
+  const partB = xorBytes(raw, partA);
+  return { partA: bytesToBase64Url(partA), partB: bytesToBase64Url(partB) };
+}
+
+// Reconstruct the CryptoKey from two parts.
+export async function combineKeyParts(partAB64url, partBB64url) {
+  const a = base64UrlToBytes(partAB64url);
+  const b = base64UrlToBytes(partBB64url);
+  if (a.length !== 32 || b.length !== 32) throw new Error('bad part length');
+  const raw = xorBytes(a, b);
+  return crypto.subtle.importKey('raw', raw, { name: 'AES-GCM' }, true, [
+    'encrypt',
+    'decrypt',
+  ]);
+}
+
 // --- encryption ------------------------------------------------------------
 
 // Returns the storage blob as a base64 string of iv||ciphertext.
