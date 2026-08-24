@@ -18,6 +18,9 @@
       <div class="toolbar">
         <button id="save">Save</button>
         <button id="delete" class="secondary" hidden>Delete</button>
+        <label class="toggle" title="Require a second key part (a QR or pasted string) to read">
+          <input type="checkbox" id="split-toggle" /> Split key (URL + QR)
+        </label>
         <span id="mode" class="mode"></span>
       </div>
 
@@ -33,11 +36,34 @@
 
       <div id="links" class="links" hidden>
         <h3>Your links</h3>
-        <label for="view-link">View link (read-only — safe to share)</label>
-        <div class="row">
-          <input id="view-link" readonly />
-          <button class="secondary" data-copy="view-link">Copy</button>
+
+        <div id="full-view-row" hidden>
+          <label for="view-link">View link (read-only — safe to share)</label>
+          <div class="row">
+            <input id="view-link" readonly />
+            <button class="secondary" data-copy="view-link">Copy</button>
+          </div>
         </div>
+
+        <div id="split-box" hidden>
+          <label for="split-link">Split view link — part A (share over channel 1)</label>
+          <div class="row">
+            <input id="split-link" readonly />
+            <button class="secondary" data-copy="split-link">Copy</button>
+          </div>
+          <label for="split-part-b">Second key part — part B (share over channel 2)</label>
+          <div class="row">
+            <input id="split-part-b" readonly />
+            <button class="secondary" data-copy="split-part-b">Copy</button>
+          </div>
+          <div id="qr" class="qr"></div>
+          <p class="muted-note">
+            The reader needs <strong>both</strong> the link and part B (paste the
+            string, or scan this QR). Deliver them separately. Neither half alone
+            can decrypt the document.
+          </p>
+        </div>
+
         <label for="edit-link">Edit link (keep private — grants write access)</label>
         <div class="row">
           <input id="edit-link" readonly />
@@ -54,6 +80,7 @@
     <!-- Vendored, self-hosted. No external network requests. -->
     <script src="/vendor/marked.min.js"></script>
     <script src="/vendor/purify.min.js"></script>
+    <script src="/vendor/qrcode.min.js"></script>
     <script type="module" src="/js/edit.js"></script>
   </body>
 </html>

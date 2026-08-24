@@ -16,6 +16,19 @@
     </header>
     <main>
       <div id="status" class="status">Loading…</div>
+
+      <div id="split-prompt" class="links" hidden>
+        <h3>This is a split link</h3>
+        <p class="muted-note">
+          Reading it needs a second key part, delivered separately (a pasted
+          string, or scan the QR with your phone and paste what it shows).
+        </p>
+        <div class="row">
+          <input id="part-b" placeholder="Paste the second key part…" autocomplete="off" spellcheck="false" />
+          <button id="unlock">Unlock</button>
+        </div>
+      </div>
+
       <article id="content" class="content" hidden></article>
       <div id="meta" class="meta"></div>
     </main>

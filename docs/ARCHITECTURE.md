@@ -49,6 +49,15 @@ metadata, and they reveal nothing about content or identity.
   and compares in constant time (`timingSafeEqual`). The server sees the raw
   secret only transiently during an authorized write, over TLS, and never
   persists it.
+- **Split-key sharing (optional):** the read key may be split into two parts via
+  2-of-2 additive secret sharing over GF(2): `key = partA XOR partB`. Part A
+  rides in the view link (`/d/<id>#s.<partA>`); part B is delivered out of band
+  (a pasted string or a QR code). Each part alone is uniformly random and
+  reveals nothing about the key or content; both are required to decrypt. Part B
+  is combined in the client and never placed in the URL, keeping the two halves
+  on separate channels. This is a sharing option — it does not change what the
+  server stores (still just ciphertext) and does not defeat a holder of *both*
+  parts (including the operator, if handed both).
 
 ## Guarantees
 

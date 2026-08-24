@@ -26,6 +26,11 @@ const targets = [
     out: 'purify.min.js',
     candidates: ['dist/purify.min.js', 'dist/purify.js'],
   },
+  {
+    pkg: 'qrcode-generator',
+    out: 'qrcode.min.js',
+    candidates: ['qrcode.js', 'dist/qrcode.min.js'],
+  },
 ];
 
 async function exists(p) {

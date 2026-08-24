@@ -52,6 +52,20 @@ npm start        # serves on http://localhost:8787
 Open <http://localhost:8787/edit>, write some markdown, and click **Save**. You
 get a view link and an edit link. That's it — no signup.
 
+### Split-key sharing (URL + QR)
+
+Toggle **Split key (URL + QR)** in the editor before saving to split the read
+key into two parts using 2-of-2 secret sharing (`key = partA XOR partB`):
+
+- **Part A** rides in the view link: `/d/<id>#s.<partA>`
+- **Part B** is shown as a copyable string *and* a QR code.
+
+A reader needs **both** to decrypt — deliver them over separate channels. Either
+half alone is uniformly random and reveals nothing. When someone opens a split
+link, the viewer prompts for part B (paste the string, or scan the QR with a
+phone and paste the result); part B is combined locally and never placed in the
+URL.
+
 ### Configuration
 
 All optional, via environment variables:
