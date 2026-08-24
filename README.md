@@ -93,12 +93,18 @@ docs/ARCHITECTURE.md  threat model and crypto design
 test/              server integration tests
 ```
 
-## Roadmap: commands
+## Roadmap
 
-Mihayon is built to grow **commands** — actions a document can offer the reader,
-such as fetching live data through a proxy the reader supplies (so the host never
-brokers or sees that traffic). The extension point exists today
-([`public/js/commands/`](public/js/commands/)) but no commands are wired in yet.
+- **Commands** — actions a document can offer the reader, such as fetching live
+  data through a proxy the reader supplies (so the host never brokers or sees
+  that traffic). The extension point exists today
+  ([`public/js/commands/`](public/js/commands/)) but no commands are wired in yet.
+- **Peer distribution** — while readers are online they serve a document to each
+  other, so it survives even if the origin removes its copy; the origin stays the
+  always-on fallback. Design: [`docs/P2P.md`](docs/P2P.md).
+- **Anonymous comments** — pseudonymous, unforgeable, end-to-end encrypted
+  comments with client-side filtering and owner moderation. Design:
+  [`docs/COMMENTS.md`](docs/COMMENTS.md).
 
 ## License
 
